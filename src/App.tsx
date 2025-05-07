@@ -6,10 +6,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import MyCourses from "./pages/MyCourses";
 import Discover from "./pages/Discover";
-import Schedule from "./pages/Schedule";
-import Progress from "./pages/Progress";
-import Certificates from "./pages/Certificates";
 import NotFound from "./pages/NotFound";
+import { SidebarProvider } from "./context/SidebarContext";
+import MainLayout from "./components/MainLayout";
 
 const queryClient = new QueryClient();
 
@@ -18,19 +17,18 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <div className="min-h-screen bg-gradient-to-br ">
+      <SidebarProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/my-courses" element={<MyCourses />} />
-            <Route path="/discover" element={<Discover />} />
-            <Route path="/schedule" element={<Schedule />} />
-            <Route path="/progress" element={<Progress />} />
-            <Route path="/certificates" element={<Certificates />} />
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<Index />} />
+              <Route path="/my-courses" element={<MyCourses />} />
+              <Route path="/discover" element={<Discover />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
-      </div>
+      </SidebarProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

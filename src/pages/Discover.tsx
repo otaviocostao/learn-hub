@@ -1,16 +1,8 @@
-import React, { useState } from 'react';
-import AppSidebar from '@/components/AppSidebar';
-import Navbar from '@/components/Navbar';
+import React from 'react';
 import CourseCard from '@/components/CourseCard';
 import { Compass, Filter } from 'lucide-react';
 
 const Discover = () => {
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsSidebarCollapsed(!isSidebarCollapsed);
-  };
-
   const popularCourses = [
     {
       id: 'disc-1',
@@ -90,53 +82,45 @@ const Discover = () => {
   ];
 
   return (
-    <div className="flex min-h-screen">
-      <AppSidebar isCollapsed={isSidebarCollapsed} toggleCollapse={toggleSidebar} />
-      
-      <div className={`flex-1 transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'ml-20' : 'ml-60'}`}>
-        <Navbar />
+    <div>
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold mb-2">Discover Courses</h1>
+          <p className="text-white/70">Find your next learning adventure</p>
+        </div>
         
-        <main className="container mx-auto px-6 py-8 pt-20">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">Discover Courses</h1>
-              <p className="text-white/70">Find your next learning adventure</p>
-            </div>
-            
-            <button className="glass-button flex items-center gap-2">
-              <Filter size={18} />
-              Filter Courses
-            </button>
-          </div>
-          
-          <div className="glass-panel mb-10">
-            <div className="flex items-center mb-6">
-              <Compass className="mr-2 text-primary" size={24} />
-              <h2 className="text-2xl font-semibold">Popular Courses</h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {popularCourses.map(course => (
-                <CourseCard key={course.id} course={course} />
-              ))}
-            </div>
-          </div>
-          
-          <div className="glass-panel">
-            <div className="flex items-center mb-6">
-              <span className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mr-2">
-                <span className="text-sm font-bold">N</span>
-              </span>
-              <h2 className="text-2xl font-semibold">New Releases</h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {newCourses.map(course => (
-                <CourseCard key={course.id} course={course} />
-              ))}
-            </div>
-          </div>
-        </main>
+        <button className="glass-button flex items-center gap-2">
+          <Filter size={18} />
+          Filter Courses
+        </button>
+      </div>
+      
+      <div className="glass-panel mb-10">
+        <div className="flex items-center mb-6">
+          <Compass className="mr-2 text-primary" size={24} />
+          <h2 className="text-2xl font-semibold">Popular Courses</h2>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {popularCourses.map(course => (
+            <CourseCard key={course.id} course={course} />
+          ))}
+        </div>
+      </div>
+      
+      <div className="glass-panel">
+        <div className="flex items-center mb-6">
+          <span className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mr-2">
+            <span className="text-sm font-bold">N</span>
+          </span>
+          <h2 className="text-2xl font-semibold">New Releases</h2>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {newCourses.map(course => (
+            <CourseCard key={course.id} course={course} />
+          ))}
+        </div>
       </div>
     </div>
   );
