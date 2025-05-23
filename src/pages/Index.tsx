@@ -124,8 +124,8 @@ const Index = () => {
     <div className="animate-fade-in">
       <div className="mb-8 flex items-start justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-1">Olá, Rafael Viado!</h1>
-          <p className="text-white/70">Pronta para aprender algo novo hoje?</p>
+          <h1 className="text-3xl font-bold text-white mb-1">Olá, Usuário!</h1>
+          <p className="text-white/70">Pronto para aprender algo novo hoje?</p>
         </div>
         
         <div className="flex items-center">

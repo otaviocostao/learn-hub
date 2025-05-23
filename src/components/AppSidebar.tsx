@@ -56,8 +56,8 @@ const AppSidebar: React.FC<AppSidebarProps> = () => {
         </div>
         {!isSidebarCollapsed && (
           <>
-            <h3 className="mt-2 font-medium text-white whitespace-nowrap">Rafael Viado</h3>
-            <p className="text-xs text-white/70 whitespace-nowrap">Mamou o grupo</p>
+            <h3 className="mt-2 font-medium text-white whitespace-nowrap">Usuário</h3>
+            <p className="text-xs text-white/70 whitespace-nowrap">...</p>
             
             <div className="w-full mt-3">
               <div className="flex items-center justify-between text-xs mb-1">
