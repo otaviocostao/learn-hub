@@ -62,7 +62,7 @@ const discoverLesson = [
   },
 ];
 
-const VideoLesson = () => {
+const Lesson = () => {
   return (
     <div className="animate-fade-in">
       <div className="mt-5 mb-8 flex items-start justify-between">
@@ -92,4 +92,4 @@ const VideoLesson = () => {
   );
 };
 
-export default VideoLesson;
+export default Lesson;
