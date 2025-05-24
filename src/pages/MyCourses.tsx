@@ -20,7 +20,7 @@ const MyCourses = () => {
   
   const navigate = useNavigate();
   const handleNavigate = () => {
-    navigate('/introducao-curso');
+    navigate('/course');
   }
   return (
     <div className="animate-fade-in bg-transparent">
