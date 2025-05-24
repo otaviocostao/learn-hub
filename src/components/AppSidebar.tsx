@@ -100,7 +100,7 @@ const AppSidebar: React.FC<AppSidebarProps> = () => {
           {!isSidebarCollapsed && <span className="whitespace-nowrap transition-opacity duration-200 ease-in-out">Ajuda & Suporte</span>}
         </Link>
         <Link 
-          to="/logout"
+          to="/login"
           title={isSidebarCollapsed ? "Sair" : undefined}
           className={`flex items-center px-3 py-2.5 rounded-md text-sm text-white/80 hover:bg-white/5 hover:text-white transition-colors ${isSidebarCollapsed ? 'justify-center' : ''}`}
         >
