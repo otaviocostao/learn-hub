@@ -83,7 +83,7 @@ const Lesson = () => {
             
             <div className=" gap-6">
                 {discoverLesson.map(course => (
-                    <LessonCard key={course.id} course={course} type="discover" className="backdrop-blur-md bg-white/15 rounded-lg border border-white/18 shadow-xl" />
+                    <CourseCard key={course.id} course={course} type="discover" className="backdrop-blur-md bg-white/15 rounded-lg border border-white/18 shadow-xl" />
                 ))}
             </div>
         </div>
