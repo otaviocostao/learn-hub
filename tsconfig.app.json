@@ -1,3 +1,4 @@
+// tsconfig.app.json
 {
   "compilerOptions": {
     "target": "ES2020",
@@ -14,7 +15,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Linting */
+    /* Linting (suas configurações mantidas) */
     "strict": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
@@ -24,7 +25,15 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+
+    // ADICIONADO/MODIFICADO PARA SUPORTE A import.meta.env E TIPOS DO VITE:
+    "types": ["vite/client", "node"] // "vite/client" é crucial para import.meta.env
+                                     // "node" pode ser útil para outras bibliotecas ou se você usar APIs do Node no front-end (raro)
+                                     // Se você já tinha "types": [], substitua. Se não tinha, adicione.
   },
-  "include": ["src"]
+  "include": [
+    "src" // Mantido - garante que src/vite-env.d.ts seja incluído
+  ]
+  // Se você tiver "exclude" ou "references", mantenha-os como estavam.
 }

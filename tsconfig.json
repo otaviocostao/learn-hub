@@ -1,14 +1,16 @@
 {
-  "files": [],
+  "files": [], // Geralmente vazio em um tsconfig de solução
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
+    // Opções globais ou que podem ser herdadas
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
+    // Suas outras opções globais
     "noImplicitAny": false,
     "noUnusedParameters": false,
     "skipLibCheck": true,
