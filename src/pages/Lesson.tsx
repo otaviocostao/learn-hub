@@ -235,7 +235,7 @@ const [currentLesson, setCurrentLesson] = useState<LessonData | null>(null);
 
   return (
     <div className="animate-fade-in text-white">
-      <div className="mt-5 mb-8 flex items-start justify-between">
+      <div className=" mb-8 flex items-start justify-between">
         <h1 className="text-3xl font-bold mb-1">Windows 11: Do básico ao avançado</h1>
       </div>
       
@@ -286,7 +286,7 @@ const [currentLesson, setCurrentLesson] = useState<LessonData | null>(null);
           <div className="flex items-center justify-between mb-4 flex-shrink-0">
             <h2 className="text-xl font-semibold text-white">Aulas do curso:</h2>
           </div>  
-          <div className="flex-1 min-h-0 overflow-y-auto space-y-3 max-h-[35rem] pr-1 custom-scrollbar"> {/* Usando custom-scrollbar se configurado */}
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-3 max-h-[35rem] pr-2 p-1 custom-scrollbar"> {/* Usando custom-scrollbar se configurado */}
             {discoverLesson.map(lesson => (
               <LessonCard
                 key={lesson.id}
