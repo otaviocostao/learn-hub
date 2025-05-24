@@ -10,14 +10,15 @@ import { Star } from 'lucide-react';
 export interface LessonCardData { // Renomeei para ser mais específico, mas pode manter CourseCardProps['course']
   id: string;
   title: string;
-  model: string;
+  model: 'video' | 'ebook';
   instructor: string;
   category: string;
   rating: number;
   progress?: number;
   students?: number;
   lessons?: number;
-  youtubeVideoId: string;
+  youtubeVideoId?: string;
+  ebookUrl?: string;
 }
 
 interface LessonCardProps {
