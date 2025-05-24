@@ -83,15 +83,6 @@ const Index = () => {
           <h1 className="text-3xl font-bold text-white mb-1">Olá, Usuário!</h1>
           <p className="text-white/70">Pronto para aprender algo novo hoje?</p>
         </div>
-        
-        <div className="flex items-center">
-          <ProgressCircle progress={68} size={60}>
-            <div className="flex flex-col items-center justify-center">
-              <span className=" text-sm font-bold text-white">68%</span> 
-            </div>
-          </ProgressCircle>
-          <span className="ml-2 text-xs text-white/60 mt-0.5">Progresso Geral</span>
-        </div>
       </div>
       
       <section className="mb-10">

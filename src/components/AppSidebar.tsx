@@ -57,25 +57,8 @@ const AppSidebar: React.FC<AppSidebarProps> = () => {
         {!isSidebarCollapsed && (
           <>
             <h3 className="mt-2 font-medium text-white whitespace-nowrap">Usuário</h3>
-            <p className="text-xs text-white/70 whitespace-nowrap">...</p>
-            
-            <div className="w-full mt-3">
-              <div className="flex items-center justify-between text-xs mb-1">
-                <span className="text-white/70">Progresso</span>
-                <span className="text-white/90">68%</span>
-              </div>
-              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                <div className="progress-bar" style={{ width: '68%' }}></div>
-              </div>
-            </div>
+            <p className="text-xs text-white/70 whitespace-nowrap">...</p>  
           </>
-        )}
-        {isSidebarCollapsed && (
-          <div className="w-full mt-2">
-             <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                <div className="progress-bar" style={{ width: '68%' }}></div>
-              </div>
-          </div>
         )}
       </div>
       

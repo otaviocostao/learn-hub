@@ -4,8 +4,14 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { PlayCircle, Check, Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const IntroducaoCurso = () => {
+  const navigate = useNavigate();
+    const handleNavigate = () => {
+      navigate('/my-courses/course/lesson');
+    }
+    
   return (
     <div className="animate-fade-in p-6">
       {/* Breadcrumbs */}
@@ -34,30 +40,30 @@ const IntroducaoCurso = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
               <div className="flex items-start">
                 <Check size={20} className="text-green-400 mr-2 mt-1" />
-                <span>Poderão montar qualquer tipo de site estático, seja ele o seu próprio portfólio, seu site pessoal ou a apresentação de sua empresa na internet</span>
+                <span>Usar o Windows 11</span>
               </div>
               <div className="flex items-start">
                 <Check size={20} className="text-green-400 mr-2 mt-1" />
-                <span>Criar sites responsivos de verdade</span>
+                <span>Utilizar os Recursos do Sistema Número 1 da Microsoft</span>
               </div>
               <div className="flex items-start">
                 <Check size={20} className="text-green-400 mr-2 mt-1" />
-                <span>Criar layouts complexos com flexbox e CSS grid</span>
+                <span>Usuários com nenhum ou médio conhecimento que querem aprender Informática de forma simples</span>
               </div>
               <div className="flex items-start">
                 <Check size={20} className="text-green-400 mr-2 mt-1" />
-                <span>Criar efeitos super interessantes com CSS3</span>
+                <span>Noção essencial de Sistema Operacional</span>
               </div>
             </div>
           </Card>
 
           {/* Explore related topics */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-white mb-4">Explorar temas relacionados</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">Palavras chave:</h2>
             <div className="flex flex-wrap gap-2">
-              <Badge variant="outline" className="border-gray-600 text-gray-300 px-3 py-1">HTML</Badge>
-              <Badge variant="outline" className="border-gray-600 text-gray-300 px-3 py-1">Desenvolvimento Web</Badge>
-              <Badge variant="outline" className="border-gray-600 text-gray-300 px-3 py-1">Desenvolvimento</Badge>
+              <Badge variant="outline" className="border-gray-600 text-gray-300 px-3 py-1">Sistemas Operacionais</Badge>
+              <Badge variant="outline" className="border-gray-600 text-gray-300 px-3 py-1">Windows</Badge>
+              <Badge variant="outline" className="border-gray-600 text-gray-300 px-3 py-1">Microsoft</Badge>
             </div>
           </div>
 
@@ -67,7 +73,7 @@ const IntroducaoCurso = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
               <div className="flex items-center">
                 <PlayCircle size={20} className="text-gray-400 mr-2" />
-                <span>131,5 horas de vídeo sob demanda</span>
+                <span>20 horas de vídeo sob demanda</span>
               </div>
               <div className="flex items-center">
                 <PlayCircle size={20} className="text-gray-400 mr-2" />
@@ -89,7 +95,7 @@ const IntroducaoCurso = () => {
           <div className="text-center text-white text-4xl font-bold mb-4">
             R$ 00,00
           </div>
-          <Button className="w-full bg-blue-700 hover:bg-blue-800 text-white py-3 mb-2 rounded-md">
+          <Button onClick={handleNavigate} className="w-full bg-blue-700 hover:bg-blue-800 text-white py-3 mb-2 rounded-md">
             Ir para o curso
           </Button>
         </Card>
