@@ -1,13 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Importando useNavigate
 // import AppSidebar from '@/components/AppSidebar'; // Removido AppSidebar
 import { Book, Clock, Star, User } from 'lucide-react';
-
 const MyCourses = () => {
   // Mock data for enrolled courses
   const enrolledCourses = [
     {
       id: 1,
-      title: "Modern Web Development Masterclass",
+      title: "WINDOWS 11: O Guia Completo",
       instructor: "John Smith",
       rating: 4.9,
       reviews: 2400,
@@ -16,41 +16,12 @@ const MyCourses = () => {
       progress: 36,
       image: "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?auto=format&fit=crop&q=80&w=1000"
     },
-    {
-      id: 2,
-      title: "Advanced JavaScript Patterns",
-      instructor: "Sarah Johnson",
-      rating: 4.8,
-      reviews: 1800,
-      students: 15000,
-      hours: 28,
-      progress: 75,
-      image: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&q=80&w=1000"
-    },
-    {
-      id: 3,
-      title: "UI/UX Design Fundamentals",
-      instructor: "Michael Wong",
-      rating: 4.7,
-      reviews: 1200,
-      students: 9500,
-      hours: 24,
-      progress: 50,
-      image: "https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&q=80&w=1000"
-    },
-    {
-      id: 4,
-      title: "Data Science for Beginners",
-      instructor: "Emma Davis",
-      rating: 4.6,
-      reviews: 950,
-      students: 7800,
-      hours: 36,
-      progress: 20,
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000"
-    }
   ];
-
+  
+  const navigate = useNavigate();
+  const handleNavigate = () => {
+    navigate('/introducao-curso');
+  }
   return (
     <div className="animate-fade-in bg-transparent">
       <div className="max-w-6xl mx-auto">
@@ -111,7 +82,7 @@ const MyCourses = () => {
                   <div className="progress-bar animate-pulse-light h-full" style={{ width: `${course.progress}%` }}></div>
                 </div>
                 
-                <button className="mt-auto w-full py-2.5 glass-button bg-primary/30 hover:bg-primary/40 text-white font-medium">
+                <button onClick={handleNavigate} className="mt-auto w-full py-2.5 glass-button bg-primary/30 hover:bg-primary/40 text-white font-medium">
                   Continuar
                 </button>
               </div>

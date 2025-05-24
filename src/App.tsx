@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import { SidebarProvider } from "./context/SidebarContext";
 import MainLayout from "./components/MainLayout";
 import Lesson from "./pages/Lesson";
+import IntroducaoCurso from "./pages/IntroducaoCurso";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
               <Route path="/my-courses" element={<MyCourses />} />
               <Route path="/discover" element={<Discover />} />
               <Route path="/my-courses/course/video-lesson" element={<Lesson />}/>
+              <Route path="/introducao-curso" element={<IntroducaoCurso />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

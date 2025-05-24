@@ -6,54 +6,10 @@ import { ArrowRight } from 'lucide-react';
 const mockCourses = [
   {
     id: '1',
-    title: 'Informática Básica para Iniciantes',
+    title: 'CURSO WINDOWS 11',
     instructor: 'Equipe LearnHub',
     category: 'Informática',
     image: '/images/informatica_basica.jpg',
-    rating: 0,
-    progress: 0,
-    students: 0,
-    lessons: 0
-  },
-  {
-    id: '2',
-    title: 'Solução de Problemas de Informática',
-    instructor: 'Equipe LearnHub',
-    category: 'Informática',
-    image: '/images/solucao_problemas_informatica.jpg',
-    rating: 0,
-    progress: 0,
-    students: 0,
-    lessons: 0
-  },
-  {
-    id: '3',
-    title: 'Aprofundamento em Informática para o Ambiente Acadêmico',
-    instructor: 'Equipe LearnHub',
-    category: 'Informática',
-    image: '/images/informatica_academico.jpg',
-    rating: 0,
-    progress: 0,
-    students: 0,
-    lessons: 0
-  },
-  {
-    id: '4',
-    title: 'Maximizando a Produtividade no Windows com Módulos de Tarefas',
-    instructor: 'Equipe LearnHub',
-    category: 'Windows',
-    image: '/images/produtividade_windows.jpg',
-    rating: 0,
-    progress: 0,
-    students: 0,
-    lessons: 0
-  },
-  {
-    id: '5',
-    title: 'Dominando a Barra de Tarefas do Windows: Conexão Wi-Fi, Áudio e Mais',
-    instructor: 'Equipe LearnHub',
-    category: 'Windows',
-    image: '/images/barra_tarefas_windows.jpg',
     rating: 0,
     progress: 0,
     students: 0,
