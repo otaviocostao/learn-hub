@@ -12,7 +12,6 @@ import MyCourses from "./pages/MyCourses";
 import Discover from "./pages/Discover";
 import NotFound from "./pages/NotFound";
 import Lesson from "./pages/Lesson";
-import IntroducaoCurso from "./pages/IntroducaoCurso";
 import Login from "./pages/Login";
 import Registrar from "./pages/Registrar";
 
@@ -21,6 +20,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext"; // Importe AuthPr
 import { SidebarProvider } from "./context/SidebarContext";
 import MainLayout from "./components/MainLayout";
 import ProtectedRoute from "./components/ProtectedRoute"; // Importe ProtectedRoute
+import CourseContent from "./pages/CourseContent";
 
 const queryClient = new QueryClient();
 
@@ -58,13 +58,13 @@ const AppContent: React.FC = () => {
             <Route path="/" element={<Index />} />
             <Route path="/my-courses" element={<MyCourses />} />
             <Route path="/discover" element={<Discover />} />
-            <Route path="/my-courses/course/lesson" element={<Lesson />} />
-            <Route path="/course" element={<IntroducaoCurso />} />
+            <Route path="/course/:courseId/lesson" element={<Lesson />} />
+            <Route path="/course/:courseId" element={<CourseContent />} />
             {/* Adicione aqui outras rotas que precisam de autenticação e usam MainLayout */}
             {/* Exemplo de rota apenas para admin:
             <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
               <Route path="/admin/dashboard" element={<div>Página do Admin</div>} />
-            </Route>
+            </Route>  
             */}
           </Route>
         </Route>

@@ -7,25 +7,25 @@ interface CourseCardProps {
     id: string;
     title: string;
     instructor: string;
-    image?: string;
+    image_url?: string;
     category: string;
     rating: number;
-    progress?: number;
     students?: number;
-    lessons?: number;
+    lesson_count?: number;
   };
+  progress?: number;
   type?: 'in-progress' | 'discover';
   className?: string;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course, type = 'discover', className }) => {
-  const { id, title, instructor, image, category, rating, progress = 0, students, lessons } = course;
+const CourseCard: React.FC<CourseCardProps> = ({ course, progress = 0, type = 'discover', className }) => {
+  const { id, title, instructor, image_url, category, rating, students, lesson_count } = course;
   
   return (
-    <Link to={`/courses/${id}`} className={`course-card flex flex-col h-full ${className || ''}`}>
+    <Link to={`/course/${id}`} className={`course-card flex flex-col h-full ${className || ''}`}>
       <div className="aspect-video relative overflow-hidden rounded-t-lg">
         <img 
-          src={image || `https://source.unsplash.com/random/800x600/?${category.toLowerCase().replace(/\s+/g, '-')}`}
+          src={image_url || `https://source.unsplash.com/random/800x600/?${category.toLowerCase().replace(/\s+/g, '-')}`}
           alt={title}
           className="w-full h-full object-cover"
         />
