@@ -21,6 +21,8 @@ import { SidebarProvider } from "./context/SidebarContext";
 import MainLayout from "./components/MainLayout";
 import ProtectedRoute from "./components/ProtectedRoute"; // Importe ProtectedRoute
 import CourseContent from "./pages/CourseContent";
+import AdminPage from "./pages/AdminPage";
+import AdminLesson from "./pages/AdminLessons";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +62,8 @@ const AppContent: React.FC = () => {
             <Route path="/discover" element={<Discover />} />
             <Route path="/course/:courseId/lesson" element={<Lesson />} />
             <Route path="/course/:courseId" element={<CourseContent />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin/course/:courseId/lesson" element={<AdminLesson />} />
             {/* Adicione aqui outras rotas que precisam de autenticação e usam MainLayout */}
             {/* Exemplo de rota apenas para admin:
             <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
