@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Star } from 'lucide-react';
 
-interface CourseCardProps {
+export interface CourseCardProps {
   course: {
     id: string;
     title: string;

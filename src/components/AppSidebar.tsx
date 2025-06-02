@@ -27,7 +27,6 @@ const AppSidebar: React.FC<AppSidebarProps> = () => {
 
   const menuItems = [
     { title: 'Dashboard', icon: <Home className="sidebar-icon" />, path: '/' },
-    { title: 'Descobrir', icon: <BookOpen className="sidebar-icon" />, path: '/discover' },
     { title: 'Meus Cursos', icon: <Book className="sidebar-icon" />, path: '/my-courses' },
   ];
 

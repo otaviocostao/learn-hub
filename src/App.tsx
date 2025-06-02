@@ -59,7 +59,6 @@ const AppContent: React.FC = () => {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Index />} />
             <Route path="/my-courses" element={<MyCourses />} />
-            <Route path="/discover" element={<Discover />} />
             <Route path="/course/:courseId/lesson" element={<Lesson />} />
             <Route path="/course/:courseId" element={<CourseContent />} />
             <Route path="/admin" element={<AdminPage />} />

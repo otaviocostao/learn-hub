@@ -1,101 +1,162 @@
 // src/pages/Index.tsx
 
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import CourseCard from '../components/CourseCard'; // Ajuste o caminho se necessário
-// import ProgressCircle from '../components/ProgressCircle'; // Não usado diretamente aqui
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import CourseCard from '../components/CourseCard';
+import type { CourseCardProps } from '../components/CourseCard';
 import { ArrowRight } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext'; // Para obter dados do usuário
-import { getAllCourses } from '@/services/course_service'; // Para buscar cursos
-import { Course } from '@/types/course'; // Interface do curso
+import { useAuth } from '@/context/AuthContext';
+import { getAllCourses, Course } from '@/services/course_service';
+import { getAllUserProgress, UserProgress } from '@/services/userProgressService';
+import { getLessonsByCourseId, Lesson } from '@/services/lesson_service';
 
-// Interface para o CourseCard, se ele for diferente da Course
-// Por enquanto, vamos assumir que CourseCard pode receber a interface Course
-// e uma prop 'progress' separadamente se for um curso em andamento.
-interface CourseCardDisplayData extends Course {
-  progress?: number; // Para a seção "Continuar Aprendendo"
+export interface InProgressCourseDisplay {
+  id: string; // courseId
+  title?: string; // Vem de UserProgress.courseTitle
+  coverImageUrl?: string; // Vem de UserProgress.courseCoverImageUrl
+  progressPercentage: number;
+  lastAccessedLessonId?: string; // Vem de UserProgress
+  // Campos que seu CourseCard espera e que podem não estar em UserProgress
+  instructorName?: string; 
+  category?: string;
+  rating?: number;
+  lesson_count?: number;
 }
 
-
 const Index: React.FC = () => {
-  const { userProfile, currentUser } = useAuth(); // Obter nome do usuário
+  const { userProfile, currentUser } = useAuth();
+  const navigate = useNavigate();
 
   const [discoverCourses, setDiscoverCourses] = useState<Course[]>([]);
-  const [inProgressCourses, setInProgressCourses] = useState<CourseCardDisplayData[]>([]); // Cursos com progresso
+  const [inProgressCourses, setInProgressCourses] = useState<InProgressCourseDisplay[]>([]);
   const [loadingDiscover, setLoadingDiscover] = useState<boolean>(true);
   const [loadingInProgress, setLoadingInProgress] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [discoverError, setDiscoverError] = useState<string | null>(null);
+  const [inProgressError, setInProgressError] = useState<string | null>(null);
 
   const displayName = userProfile?.name || currentUser?.displayName || 'Usuário';
 
-  useEffect(() => {
-    const fetchDiscoverCourses = async () => {
-      try {
-        setLoadingDiscover(true);
-        setError(null);
-        // Busca apenas cursos publicados para a seção "Descobrir"
-        const courses = await getAllCourses(true); 
-        setDiscoverCourses(courses.slice(0, 4)); // Pega os primeiros 4 para a página inicial
-      } catch (err) {
-        console.error("Erro ao buscar cursos para descobrir:", err);
-        setError(err instanceof Error ? err.message : "Falha ao carregar cursos.");
-      } finally {
-        setLoadingDiscover(false);
-      }
-    };
+  const fetchDiscoverCourses = useCallback(async () => {
+    // ... (como antes) ...
+    try {
+      setLoadingDiscover(true);
+      setDiscoverError(null);
+      const courses = await getAllCourses(true); 
+      setDiscoverCourses(courses.slice(0, 8)); // Mostrar mais cursos na home, ex: 8
+    } catch (err) {
+      console.error("Erro ao buscar cursos para descobrir:", err);
+      setDiscoverError(err instanceof Error ? err.message : "Falha ao carregar cursos.");
+    } finally {
+      setLoadingDiscover(false);
+    }
+  }, []);
 
-    const fetchInProgressCourses = async () => {
-      // LÓGICA PARA BUSCAR CURSOS EM PROGRESSO DO USUÁRIO
-      // Isso envolveria:
-      // 1. Verificar se currentUser existe.
-      // 2. Buscar os IDs dos cursos em que o usuário está inscrito (ex: de userProfile.enrolledCourseIds
-      //    ou da subcoleção userProgress que definimos).
-      // 3. Para cada courseId, buscar os detalhes do curso (getCourseById) e os dados de progresso.
-      // 4. Montar o array inProgressCourses com os dados combinados.
-      // Por enquanto, vamos deixar mockado ou vazio para focar na listagem de "Descobrir".
-      setLoadingInProgress(true);
-      try {
-        if (currentUser && userProfile?.actual_course_id && userProfile.actual_course_id.length > 0) {
-          // Exemplo SIMPLIFICADO: buscar apenas os primeiros 4 cursos em que o usuário está inscrito
-          // Em um cenário real, você buscaria o progresso de cada um.
-          // Aqui, vamos apenas simular que eles têm progresso.
-          // const enrolled = await Promise.all(
-          //   userProfile.enrolledCourseIds.slice(0, 4).map(async (courseId) => {
-          //     const courseDetails = await getCourseById(courseId);
-          //     // Aqui você buscaria o progresso real
-          //     // const progressData = await getUserCourseProgress(currentUser.uid, courseId);
-          //     if (courseDetails) {
-          //       return { ...courseDetails, progress: Math.floor(Math.random() * 100) }; // Progresso mockado
-          //     }
-          //     return null;
-          //   })
-          // );
-          // setInProgressCourses(enrolled.filter(Boolean) as CourseCardDisplayData[]);
-          console.warn("Lógica de 'Continuar Aprendendo' precisa ser implementada com dados de progresso reais.");
-          setInProgressCourses([]); // Deixar vazio por enquanto ou com mock
-        } else {
-          setInProgressCourses([]);
-        }
-      } catch (err) {
-        console.error("Erro ao buscar cursos em progresso:", err);
-        // setError para cursos em progresso
-      } finally {
-        setLoadingInProgress(false);
-      }
-    };
-    
+  const fetchInProgressCourses = useCallback(async () => {
+    if (!currentUser?.uid) {
+      setInProgressCourses([]);
+      setLoadingInProgress(false);
+      return;
+    }
+    setLoadingInProgress(true);
+    setInProgressError(null);
+    try {
+      const userProgressList: UserProgress[] = await getAllUserProgress(currentUser.uid);
+      
+      const coursesToDisplay: InProgressCourseDisplay[] = userProgressList
+        .filter(progress => progress.courseTitle && progress.progress_percentage < 100)
+        .map(progress => ({
+          id: progress.course_id,
+          title: progress.courseTitle,
+          coverImageUrl: progress.courseCoverImageUrl,
+          progressPercentage: progress.progress_percentage,
+          lastAccessedLessonId: progress.last_accessed_lesson_id,
+        }))
+        .sort((a, b) => { // Ordenar por aqueles com progresso e depois por último acesso
+            if (a.progressPercentage > 0 && b.progressPercentage === 0) return -1;
+            if (b.progressPercentage > 0 && a.progressPercentage === 0) return 1;
+          
+            return 0; 
+        })
+        .slice(0, 4); // Mostrar até 4 cursos em progresso na home
+
+      setInProgressCourses(coursesToDisplay);
+
+    } catch (err) {
+      console.error("Erro ao buscar cursos em progresso:", err);
+      setInProgressError(err instanceof Error ? err.message : "Falha ao carregar seus cursos.");
+    } finally {
+      setLoadingInProgress(false);
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
     fetchDiscoverCourses();
-    if (currentUser) { // Só busca cursos em progresso se houver usuário logado
+    if (currentUser) { // Só busca progresso se houver usuário
         fetchInProgressCourses();
     } else {
-        setLoadingInProgress(false); // Se não há usuário, não há cursos em progresso
-        setInProgressCourses([]);
+        setInProgressCourses([]); // Limpa se o usuário deslogar
+        setLoadingInProgress(false);
     }
+  }, [currentUser, fetchDiscoverCourses, fetchInProgressCourses]);
 
-  }, [currentUser, userProfile]); // Re-executa se o usuário mudar
+
+  const handleContinueCourse = async (courseDisplay: InProgressCourseDisplay) => {
+    navigate(`/course/${courseDisplay.id}/lesson`);
+  };
+
+  const mapToCourseCardProps = (
+    data: Course | InProgressCourseDisplay,
+    type: 'discover' | 'in-progress'
+  ): CourseCardProps => { // Use a interface real do seu CourseCardProps
+    let cardCourseData: Pick<Course, 'id' | 'title' | 'image_url' | 'instructorName' | 'category' | 'rating' | 'lesson_count'>;
+    let progressValue: number | undefined = undefined;
+
+    if (type === 'in-progress') {
+      const inProgressData = data as InProgressCourseDisplay;
+      cardCourseData = {
+        id: inProgressData.id,
+        title: inProgressData.title || "Título Indisponível",
+        image_url: inProgressData.coverImageUrl,
+        instructorName: inProgressData.instructorName, // Precisa existir em InProgressCourseDisplay ou ser buscado
+        category: inProgressData.category,         // Precisa existir em InProgressCourseDisplay ou ser buscado
+        rating: undefined, // Ou 0, pois rating é mais para descoberta
+        lesson_count: undefined, // Ou 0, pois lesson_count é mais para descoberta
+      };
+      progressValue = inProgressData.progressPercentage;
+    } else {
+      const discoverData = data as Course;
+      cardCourseData = {
+        id: discoverData.id,
+        title: discoverData.title,
+        image_url: discoverData.image_url,
+        instructorName: discoverData.instructorName,
+        category: discoverData.category,
+        rating: discoverData.rating,
+        lesson_count: discoverData.lesson_count,
+      };
+    }
+    // Esta é a estrutura que o seu CourseCard espera, conforme erro anterior.
+    // Se mudou, ajuste aqui.
+    return {
+        course: { // O CourseCard espera um objeto 'course' aninhado
+            id: cardCourseData.id,
+            title: cardCourseData.title,
+            instructor: cardCourseData.instructorName || 'N/A', // Mapeia para 'instructor' se o Card espera isso
+            category: cardCourseData.category || 'N/A',
+            image_url: cardCourseData.image_url || '/placeholder.jpg', // Mapeia para 'image_url'
+            rating: cardCourseData.rating || 0,
+            lesson_count: cardCourseData.lesson_count || 0, // Renomeei para lesson_count no exemplo do erro
+            // Adicione quaisquer outros campos que seu 'course' prop no CourseCard espera
+        },
+        progress: progressValue,
+        // 'type' e 'className' são passadas separadamente
+    } as unknown as CourseCardProps; // Use 'as unknown as CourseCardProps' se a estrutura for complexa e você tiver certeza
+                                   // Ou melhor, defina um tipo exato para o que o CourseCard espera em sua prop 'course'
+  };
+
 
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in p-4 md:p-6">
       <div className="mb-8 flex items-start justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white mb-1">Olá, {displayName}!</h1>
@@ -103,12 +164,10 @@ const Index: React.FC = () => {
         </div>
       </div>
       
-      {/* Seção Continuar Aprendendo */}
-      {currentUser && ( // Só mostra se o usuário estiver logado
+      {currentUser && (
         <section className="mb-10">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-white">Continuar Aprendendo</h2>
-            {/* Adicionar link para "Meus Cursos" se houver mais */}
             {inProgressCourses.length > 0 && (
                  <Link to="/my-courses" className="flex items-center text-primary hover:text-primary/90 transition-colors text-sm font-medium">
                     Ver todos
@@ -118,69 +177,53 @@ const Index: React.FC = () => {
           </div>
           
           {loadingInProgress ? (
-            <p className="text-white/70">Carregando seus cursos...</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {[...Array(4)].map((_, i) => <div key={i} className="h-64 bg-white/10 rounded-lg animate-pulse"></div>)} {/* Skeleton */}
+            </div>
+          ) : inProgressError ? (
+            <p className="text-red-400 bg-red-900/30 p-3 rounded-md">Erro ao carregar seus cursos: {inProgressError}</p>
           ) : inProgressCourses.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {inProgressCourses.map(course => (
-                <CourseCard 
-                  key={course.id} 
-                  // Passe as props que seu CourseCard espera
-                  // Assumindo que ele pode lidar com a interface Course e uma prop 'progress'
-                  course={{
-                    id: course.id,
-                    title: course.title,
-                    instructor: course.instructorName, // Ou o campo que seu Card usa
-                    category: course.category,
-                    image_url: course.image_url, // Ou o campo que seu Card usa
-                    rating: course.rating,
-                    lesson_count: course.lesson_count,
-                    // Não passe o objeto Course inteiro se o Card não esperar todos os campos
-                  }}
-                  progress={course.progress} 
-                  type="in-progress" 
-                  className="backdrop-blur-md bg-white/15 rounded-lg border border-white/18 shadow-xl" 
-                />
+              {inProgressCourses.map(courseDisplayData => (
+                <div key={courseDisplayData.id} onClick={() => handleContinueCourse(courseDisplayData)} className="cursor-pointer">
+                    <CourseCard 
+                    {...mapToCourseCardProps(courseDisplayData, 'in-progress')}
+                    type="in-progress"
+                    className="backdrop-blur-md bg-white/15 rounded-lg border border-white/18 shadow-xl h-full" 
+                    />
+                </div>
               ))}
             </div>
           ) : (
-            !loadingDiscover && <p className="text-white/70">Você ainda não começou nenhum curso. Que tal descobrir algo novo?</p>
+            <p className="text-white/70 p-3 bg-black/10 rounded-md">Você ainda não começou nenhum curso. Explore abaixo!</p>
           )}
         </section>
       )}
       
-      {/* Seção Descobrir Novos Cursos */}
       <section>
+        {/* ... (Seção Descobrir Novos Cursos como antes, usando mapToCourseCardProps) ... */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-white">Descobrir Novos Cursos</h2>
           <Link to="/discover" className="flex items-center text-primary hover:text-primary/90 transition-colors text-sm font-medium">
-            Ver todos
-            <ArrowRight className="ml-1 w-4 h-4" />
+            Ver todos <ArrowRight className="ml-1 w-4 h-4" />
           </Link>
         </div>
-        
         {loadingDiscover ? (
-          <p className="text-white/70">Carregando cursos...</p>
-        ) : error ? (
-          <p className="text-red-500">Erro: {error}</p>
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {[...Array(8)].map((_, i) => <div key={i} className="h-64 bg-white/10 rounded-lg animate-pulse"></div>)} {/* Skeleton */}
+            </div>
+        ) : discoverError ? (
+          <p className="text-red-400 bg-red-900/30 p-3 rounded-md">Erro: {discoverError}</p>
         ) : discoverCourses.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {discoverCourses.map(course => (
-              <CourseCard 
-                key={course.id} 
-                // Passe as props que seu CourseCard espera
-                // Assumindo que ele pode lidar com a interface Course
-                course={{
-                  id: course.id,
-                  title: course.title,
-                  instructor: course.instructorName, // Ou o campo que seu Card usa
-                  category: course.category,
-                  image_url: course.image_url, // Ou o campo que seu Card usa
-                  rating: course.rating,
-                  lesson_count: course.lesson_count,
-                }}
-                type="discover" 
-                className="backdrop-blur-md bg-white/15 rounded-lg border border-white/18 shadow-xl" 
-              />
+            {discoverCourses.map(courseData => (
+              <Link key={courseData.id} to={`/course/${courseData.id}`}> 
+                <CourseCard 
+                  {...mapToCourseCardProps(courseData, 'discover')}
+                  type="discover"
+                  className="backdrop-blur-md bg-white/15 rounded-lg border border-white/18 shadow-xl h-full" 
+                />
+              </Link>
             ))}
           </div>
         ) : (
