@@ -61,14 +61,12 @@ const AppContent: React.FC = () => {
             <Route path="/my-courses" element={<MyCourses />} />
             <Route path="/course/:courseId/lesson" element={<Lesson />} />
             <Route path="/course/:courseId" element={<CourseContent />} />
-            <Route path="/admin" element={<AdminPage />} />
-            <Route path="/admin/course/:courseId/lesson" element={<AdminLesson />} />
-            {/* Adicione aqui outras rotas que precisam de autenticação e usam MainLayout */}
-            {/* Exemplo de rota apenas para admin:
+
             <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-              <Route path="/admin/dashboard" element={<div>Página do Admin</div>} />
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/admin/course/:courseId/lesson" element={<AdminLesson />} />
             </Route>  
-            */}
+            
           </Route>
         </Route>
         
