@@ -12,8 +12,8 @@ import { getLessonsByCourseId, Lesson } from '@/services/lesson_service';
 
 export interface InProgressCourseDisplay {
   id: string; // courseId
-  title?: string; // Vem de UserProgress.courseTitle
-  coverImageUrl?: string; // Vem de UserProgress.courseCoverImageUrl
+  courseTitle?: string; // Vem de UserProgress.courseTitle
+  image_url?: string; // Vem de UserProgress.courseCoverImageUrl
   progressPercentage: number;
   lastAccessedLessonId?: string; // Vem de UserProgress
   // Campos que seu CourseCard espera e que podem não estar em UserProgress
@@ -66,8 +66,9 @@ const Index: React.FC = () => {
         .filter(progress => progress.courseTitle && progress.progress_percentage < 100)
         .map(progress => ({
           id: progress.course_id,
-          title: progress.courseTitle,
-          coverImageUrl: progress.courseCoverImageUrl,
+          courseTitle: progress.courseTitle,
+          image_url: progress.image_url,
+          
           progressPercentage: progress.progress_percentage,
           lastAccessedLessonId: progress.last_accessed_lesson_id,
         }))
@@ -115,8 +116,8 @@ const Index: React.FC = () => {
       const inProgressData = data as InProgressCourseDisplay;
       cardCourseData = {
         id: inProgressData.id,
-        title: inProgressData.title || "Título Indisponível",
-        image_url: inProgressData.coverImageUrl,
+        title: inProgressData.courseTitle || "Título Indisponível",
+        image_url: inProgressData.image_url,
         instructorName: inProgressData.instructorName, // Precisa existir em InProgressCourseDisplay ou ser buscado
         category: inProgressData.category,         // Precisa existir em InProgressCourseDisplay ou ser buscado
         rating: undefined, // Ou 0, pois rating é mais para descoberta

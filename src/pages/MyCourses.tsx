@@ -77,7 +77,7 @@ const MyCourses: React.FC = () => {
         return {
           id: progress.course_id,
           title: progress.courseTitle || "Título Indisponível",
-          coverImageUrl: progress.courseCoverImageUrl,
+          image_url: progress.image_url,
           progressPercentage: progress.progress_percentage,
           completedLessonsCount: completedCount,
           totalLessons: totalLessons,

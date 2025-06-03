@@ -62,7 +62,7 @@ export const setUserCourseProgress = async (
       enrolled_time: initialProgressData?.enrolled_time || serverTimestamp() as Timestamp, // Se não fornecido, usa agora
       last_updated_at: serverTimestamp() as Timestamp,
       courseTitle: initialProgressData?.courseTitle || courseDetails?.title,
-      courseCoverImageUrl: initialProgressData?.courseCoverImageUrl || courseDetails?.image_url,
+      image_url: initialProgressData?.image_url || courseDetails?.image_url,
     };
 
     // Usamos setDoc porque o ID do documento (courseId) é conhecido.
@@ -109,7 +109,7 @@ export const getUserCourseProgress = async (
         enrolled_time: data.enrolled_time || data['enrolled-at'], // Mapeia 'enrolled-at' se for o nome no DB
         last_updated_at: data.last_updated_at || data['last-updated-at'], // Mapeia 'last-updated-at'
         courseTitle: data.courseTitle,
-        courseCoverImageUrl: data.courseCoverImageUrl,
+        image_url: data.image_url,
       } as UserProgress;
     } else {
       console.log(`Nenhum progresso encontrado para o curso ${courseId} do usuário ${userId}.`);
@@ -148,7 +148,7 @@ export const getAllUserProgress = async (userId: string): Promise<UserProgress[]
         enrolled_time: data.enrolled_time || data['enrolled-at'],
         last_updated_at: data.last_updated_at || data['last-updated-at'],
         courseTitle: data.courseTitle,
-        courseCoverImageUrl: data.courseCoverImageUrl,
+        image_url: data.image_url,
       } as UserProgress);
     });
     return progresses;
@@ -248,7 +248,7 @@ export const markLessonAsComplete = async (
                 course_id: courseId,
                 enrolled_at: serverTimestamp(),
                 courseTitle: courseDetails?.title,
-                courseCoverImageUrl: courseDetails?.image_url,
+                image_url: courseDetails?.image_url,
                 ...updates
             });
         }
