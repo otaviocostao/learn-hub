@@ -15,7 +15,7 @@ const MainLayout: React.FC = () => {
           className={`flex-1 overflow-x-hidden overflow-y-auto bg-gradient-to-br from-background to-background-dark p-4 transition-all duration-300 ease-in-out`}
           style={{
             marginLeft: isSidebarCollapsed ? '5rem' : '15rem', // Corresponde a w-20 (5rem) e w-60 (15rem) da sidebar
-            paddingTop: '4rem' // Corresponde a h-16 (4rem) da Navbar
+            paddingTop: '0.5rem' // Corresponde a h-16 (4rem) da Navbar
           }}
         >
           <Outlet />

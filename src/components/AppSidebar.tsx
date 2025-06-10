@@ -117,14 +117,7 @@ const AppSidebar: React.FC<AppSidebarProps> = () => {
       {/* Ações no Rodapé da Sidebar */}
       {currentUser && (
         <div className={`mt-auto border-t border-white/5 p-2 ${isSidebarCollapsed ? 'py-2' : 'p-4'}`}>
-          <Link 
-            to="/settings"
-            title={isSidebarCollapsed ? "Configurações" : undefined}
-            className={`flex items-center px-3 py-2.5 rounded-md text-sm text-white/80 hover:bg-white/5 hover:text-white transition-colors ${isSidebarCollapsed ? 'justify-center' : ''}`}
-          >
-            <Settings className={`sidebar-icon transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'mr-0' : 'mr-3'}`} />
-            {!isSidebarCollapsed && <span className="whitespace-nowrap transition-opacity duration-200 ease-in-out">Configurações</span>}
-          </Link>
+          
           <Link 
             to="/help"
             title={isSidebarCollapsed ? "Ajuda e Suporte" : undefined}

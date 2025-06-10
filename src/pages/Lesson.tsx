@@ -1,5 +1,3 @@
-// src/pages/LessonPage.tsx
-
 import React, { useState, useEffect, useCallback } from 'react'; // Adicionado useCallback
 import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
 import LessonCard from '@/components/LessonCard';
@@ -17,6 +15,23 @@ import {
 } from '@/services/userProgressService'; // Importar UserProgress e as funções
 import { useAuth } from '@/context/AuthContext'; // Para obter o usuário logado
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger, // Se você quiser um botão para abrir, mas vamos controlar por estado
+  DialogClose,
+} from "@/components/ui/dialog";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Award, Check, ExternalLink, Repeat } from 'lucide-react';
 import { ArrowLeft, CheckCircle } from 'lucide-react'; // Adicionado CheckCircle
 
 const Lesson: React.FC = () => {
@@ -38,6 +53,8 @@ const Lesson: React.FC = () => {
 
   const [error, setError] = useState<string | null>(null);
   const [ebookFetchError, setEbookFetchError] = useState<string | null>(null);
+
+  const [isCourseCompletedModalOpen, setIsCourseCompletedModalOpen] = useState(false);
 
   // Buscar curso e aulas
   useEffect(() => {
@@ -194,17 +211,33 @@ const Lesson: React.FC = () => {
     }
   }, [currentUser, courseId, currentLesson, currentCourse, lessons]); // 'lessons' para advanceToNextLesson
 
-  const advanceToNextLesson = useCallback(() => {
+ const advanceToNextLesson = useCallback(() => {
     if (!currentLesson || lessons.length === 0) return;
     const currentIndex = lessons.findIndex(l => l.id === currentLesson.id);
+
     if (currentIndex !== -1 && currentIndex < lessons.length - 1) {
       const nextLesson = lessons[currentIndex + 1];
-      handleLessonClick(nextLesson); // Usa handleLessonClick para também atualizar last_accessed
+      handleLessonClick(nextLesson);
     } else {
-      alert("Parabéns! Você concluiu todas as aulas deste curso!");
-      navigate(`/curso/${courseId}`); // Volta para a página de detalhes do curso
+      // Última aula concluída
+      console.log("Todas as aulas do curso foram concluídas!");
+      // Marcar o curso como 100% completo no userProgress, se ainda não estiver
+      if (currentUser && courseId && userProgress && userProgress.progress_percentage < 100) {
+        updateUserCourseProgress(currentUser.uid, courseId, { progress_percentage: 100 })
+          .then(() => {
+            // Atualiza o estado local do progresso se necessário
+            setUserProgress(prev => prev ? { ...prev, progress_percentage: 100 } : null);
+            setIsCourseCompletedModalOpen(true); // Abre o modal de conclusão
+          })
+          .catch(err => {
+            console.error("Erro ao marcar curso como 100% completo:", err);
+            setIsCourseCompletedModalOpen(true); // Ainda abre o modal, mas pode mostrar um aviso
+          });
+      } else {
+        setIsCourseCompletedModalOpen(true); // Abre o modal de conclusão
+      }
     }
-  }, [lessons, currentLesson, handleLessonClick, courseId, navigate]);
+  }, [lessons, currentLesson, handleLessonClick, courseId, navigate, currentUser, userProgress]);
 
 
   const handleVideoEnd = () => {
@@ -217,6 +250,8 @@ const Lesson: React.FC = () => {
     handleMarkLessonCompleteAndAdvance();
   };
 
+  
+  
   const renderMainContent = () => {
     // ... (lógica de renderMainContent como antes, usando currentLesson.youtubeVideoId (camelCase)) ...
     // Certifique-se que currentLesson.youtubeVideoId está correto se antes era youtube_video_id
@@ -323,6 +358,67 @@ const Lesson: React.FC = () => {
           </div>
         </aside>
       </section>
+      <Dialog open={isCourseCompletedModalOpen} onOpenChange={setIsCourseCompletedModalOpen}>
+        <DialogContent className="sm:max-w-md bg-slate-900 text-white border-slate-700 shadow-2xl">
+          <DialogHeader className="text-center">
+            <Award className="mx-auto h-16 w-16 text-yellow-400 mb-4" />
+            <DialogTitle className="text-2xl font-bold text-gradient">Parabéns!</DialogTitle>
+            <DialogDescription className="text-slate-400">
+              Você concluiu todas as aulas do curso "{currentCourse?.title}".
+            </DialogDescription>
+          </DialogHeader>
+
+          <Accordion type="single" collapsible className="w-full my-6">
+            <AccordionItem value="item-1" className="border-slate-700">
+              <AccordionTrigger className="hover:no-underline text-white">O que vem a seguir?</AccordionTrigger>
+              <AccordionContent className="text-slate-300">
+                <ul className="list-disc space-y-2 pl-5">
+                  <li>Revise o material sempre que precisar.</li>
+                  <li>
+                    <RouterLink 
+                      to="/discover" 
+                      className="text-sky-400 hover:text-sky-300 hover:underline"
+                      onClick={() => setIsCourseCompletedModalOpen(false)} // Fecha o modal ao clicar
+                    >
+                      Explore novos cursos
+                    </RouterLink> 
+                    para continuar aprendendo.
+                  </li>
+                  {/* Adicionar link para certificado se houver */}
+                  {/* <li>Baixe seu certificado de conclusão.</li> */}
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+            
+          </Accordion>
+
+          <DialogFooter className="sm:justify-center space-y-2 sm:space-y-0 sm:space-x-2">
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="w-full sm:w-auto hover:bg-slate-700 border-slate-600"
+              onClick={() => {
+                setIsCourseCompletedModalOpen(false);
+                navigate(`/course/${courseId}`); // Volta para a página de detalhes do curso
+              }}
+            >
+              <Repeat size={16} className="mr-2" />
+              Revisar Curso
+            </Button>
+            <Button 
+              type="button" 
+              className="w-full sm:w-auto bg-sky-600 hover:bg-sky-700"
+              onClick={() => {
+                setIsCourseCompletedModalOpen(false);
+                navigate('/my-courses'); // Ou para a página de "Meus Cursos"
+              }}
+            >
+              <Check size={16} className="mr-2" />
+              Ótimo!
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

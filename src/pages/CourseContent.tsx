@@ -85,9 +85,9 @@ const CourseContentPage: React.FC = () => {
     <div className="animate-fade-in p-4 md:p-6 lg:p-8 text-white">
       {/* Breadcrumbs ou botão de voltar */}
       <div className="mb-6">
-        <RouterLink to="/discover" className="inline-flex items-center text-sm text-sky-400 hover:text-sky-300 transition-colors">
+        <RouterLink to="/" className="inline-flex items-center text-sm text-sky-400 hover:text-sky-300 transition-colors">
           <ArrowLeft size={16} className="mr-1" />
-          Voltar para Descobrir Cursos
+          Voltar para o início
         </RouterLink>
       </div>
 

@@ -23,6 +23,7 @@ import ProtectedRoute from "./components/ProtectedRoute"; // Importe ProtectedRo
 import CourseContent from "./pages/CourseContent";
 import AdminPage from "./pages/AdminPage";
 import AdminLesson from "./pages/AdminLessons";
+import HelpPage from "./pages/HelpPage";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +62,7 @@ const AppContent: React.FC = () => {
             <Route path="/my-courses" element={<MyCourses />} />
             <Route path="/course/:courseId/lesson" element={<Lesson />} />
             <Route path="/course/:courseId" element={<CourseContent />} />
+            <Route path="/help" element={<HelpPage />} />
 
             <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
               <Route path="/admin" element={<AdminPage />} />
